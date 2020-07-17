@@ -1,0 +1,32 @@
+How to upload a hex file to energy sum module with bootloader installed (install bootloader using MPLAB X)
+
+In one folder, the following are needed:
+1. arduino.py
+2. hexfile.py
+3. crc.py
+4. hexloader.py
+5. a hex file with correct format
+
+Hex file formatting:
+In MPLAB X IDE, there is the possibility to export a hex file after building a project. Right-clicking on the project, select Set Configuration... -> Customize. Alternatively, after right-clicking, select Properties.
+In the XC8 Linker options, choose the Runtime -> Format hex file for download. In Additional Options, the Codeoffset should also be set to 0x1000 (can be changed once the bootloader is modified with another address. Note that in
+the hex file, 0x2000 appears due to two bytes making up 1 word. While the hex file contains ab cd, this translates to the word cdab.) After exporting the hex file now (right click -> export hex file), make sure to remove the last
+lines that correspond to the configuration bits (see configuration word 3, 66/491 in PIC16F18345 data sheet, including the self-write protection bits). An example hex file would contain the following at the end that should be removed before uploading:
+:020000040001F9
+:08000E008CFFF3DFFFDFFFFFB1
+:00000001FF
+For more information on the PIC Hex file format (what these lines mean), see https://www.kanda.com/blog/microcontrollers/pic-microcontrollers/pic-hex-file-format/
+
+The setup:
+arduino I2C module connected via USB to computer and I2C pins of stage 1 test board (i.e. the small board with pins for the 23 channel inputs etc. into which the energy sum modules can be plugged) or via ethernet cable to stage 2-3 module
+energy sum module powered on and bootloader running
+PowerShell with working python (3.7+ recommended) available in the directory where all the above mentioned files are located
+
+The various parameters that need to be correct are:
+1. arduino COM port number in arduino.py
+2. I2C address in hexloader.py (main() ) when defining new arduino object
+3. hex file name in hexloader.py (main() )
+
+Once these have been set, running the hexloader.py script should start the transmission. With an oscilloscope, the clock and data pins should be checked (most common issue experienced: clk and dat switched).
+
+

@@ -1,0 +1,15 @@
+bootloader_guide.pdf: http://ww1.microchip.com/downloads/en/DeviceDoc/40001779B.pdf
+
+The python script (HexLoader) takes Intel HEX files and transmits to the bootloader via I2C (Arduino module).
+
+Intel HEX format and difference between it and microchip hex format: bootloader_guide.pdf 19/45
+Program flash memory structure: PIC16F18345 data sheet 123/491
+
+A row consists of 32 words
+One word consists of 14 bits -> max value: 0x3fff
+Little-endian system: in a word, first byte is LSByte, second is MSByte
+MPLAB X export hex file produces a little-endian hex file, which probably needs no further adjustments!
+
+microchip hex file structure: https://www.kanda.com/blog/microcontrollers/pic-microcontrollers/pic-hex-file-format/
+
+Saving (in .C file) a variable to a given address means a word address; in the hex file, this is converted into a byte address.

@@ -1,0 +1,4 @@
+Pins near the 3 power supply holes:
+
+Black	White	Gray
+GND 	DAT		CLK
